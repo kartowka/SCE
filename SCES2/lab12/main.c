@@ -180,29 +180,34 @@ void swap(Book* A, Book* B) {
 }
 void addRemoveBook(Book** pb, int* pSize) {
 	int choice, rBook, i;
-	do {
-		printf("what you would like to do?\n");
-		printf("enter 1 for add Book\n");
-		printf("enter 2 for delete Book\n");
-		scanf("%d", &choice);
-	} while (choice > 2 || choice < 1);
-	if (choice == 1) {
-		(*pSize)++;
-		*pb = (Book*)realloc(*pb, *pSize * sizeof(Book));
-		getBook(&(*pb)[*pSize-1], *pSize - 1);
-	}
-	else {
+	for (;;) {
 		do {
-			printf("which book you would like to remove?\n");
-			scanf("%d", &rBook);
-			rBook--;
-		} while (rBook > *pSize-1 || rBook <= 0);
-		(*pSize)--;
-		for (i = rBook; i < *pSize; ++i) {
-			(*pb)[i] = (*pb)[i + 1]; //swap to disired location.
+			printf("what you would like to do?\n");
+			printf("enter 1 for add Book\n");
+			printf("enter 2 for delete Book\n");
+			printf("enter 0 for exit\n");
+			scanf("%d", &choice);
+		} while (choice > 2 || choice < 0);
+		if (choice == 1) {
+			(*pSize)++;
+			*pb = (Book*)realloc(*pb, *pSize * sizeof(Book));
+			getBook(&(*pb)[*pSize - 1], *pSize - 1);
 		}
-		free((*pb)[i].bookName);
-		free((*pb)[i].name);
-		*pb = (Book*)realloc(*pb,*pSize * sizeof(Book));
+		else if (choice == 2) {
+			do {
+				printf("which book you would like to remove?\n");
+				scanf("%d", &rBook);
+				rBook--;
+			} while (rBook > *pSize - 1 || rBook < 0);
+			for (i = rBook; i < *pSize-1; ++i) {
+				(*pb)[i] = (*pb)[i + 1]; //swap to disired location.
+			}
+			(*pSize)--;
+			free((*pb)[*pSize].bookName);
+			free((*pb)[*pSize].name);
+			*pb = (Book*)realloc(*pb, *pSize * sizeof(Book));
+		}
+		else
+			break;
 	}
 }
