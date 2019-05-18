@@ -2,14 +2,14 @@
 //RECURSIVE//
 //Author: Anthony Eitan Fleysher//
 //ID: 203192331// 
-
-
-#define _CRT_SECURE_NO_WARNINGS
-
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
-
+//
+//
+//#define _CRT_SECURE_NO_WARNINGS
+//
+//#include<stdio.h>
+//#include<string.h>
+//#include<stdlib.h>
+//
 ////EXERCISE1//
 //int f1(int);
 //int main() {
@@ -26,7 +26,7 @@
 //	return 1 + f1(num / 10);
 //
 //}
-
+//
 ////EXERCISE2//
 //
 //int f2v1(int);
@@ -56,9 +56,9 @@
 //		return 0;
 //	return f2v2(num + 1, num1);
 //}
-
+//
 ////EXERCISE3//
-
+//
 //int printBinary(int);
 //
 //int main() {
@@ -76,9 +76,9 @@
 //		return 1;
 //	return num % 2 + 10 * printBinary(num / 2);
 //}
-
+//
 //EXERCISE4//
-
+//
 //int f4(int, int);
 //
 //int main() {
@@ -99,9 +99,9 @@
 //	else
 //		return -num1 + f4(num1, num2 + 1);
 //}
-
+//
 ////EXERCISE5//
-
+//
 //int f5(int, int);
 //
 //int main() {
@@ -118,9 +118,9 @@
 //		return f5(num2, num1%num2);
 //	return num1;
 //}
-
+//
 ////EXERCISE6//
-
+//
 //int f6(int*, int);
 //
 //int main() {
@@ -135,9 +135,9 @@
 //		return 0;
 //	return f6(arr + 1, size - 1);
 //}
-
+//
 ////EXERCISE7//
-
+//
 //void f7(int*, int);
 //
 //int main() {
@@ -153,9 +153,9 @@
 //		f7(arr, size);
 //	}
 //}
-
+//
 ////EXERCISE8//
-
+//
 //int f8(int*, int);
 //
 //int main() {
@@ -175,9 +175,9 @@
 //	}
 //	return max;
 //}
-
+//
 ////EXERCISE9//
-
+//
 //void f9(char*);
 //
 //int main() {
@@ -192,9 +192,9 @@
 //		printf("%c", *str);
 //	}
 //}
-
+//
 ////EXERCISE10//
-
+//
 //char* f10(char*,char*);
 //
 //int main() {
@@ -214,9 +214,9 @@
 //		*str2 = *str1;
 //	return 0;
 //}
-
+//
 ////EXERCISE11//
-
+//
 //void f11(char*);
 //
 //int main() {
@@ -234,9 +234,9 @@
 //	}
 //
 //}
-
+//
 //EXERCISE12//
-
+//
 //int f12(char*);
 //int f12v2(char*);
 //
@@ -261,4 +261,4 @@
 //	if (*str == ' ')
 //		return 1 + f12(str + 1);
 //	f12(str + 1);
-}
+//}
