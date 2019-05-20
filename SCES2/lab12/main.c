@@ -211,104 +211,129 @@
 //			break;
 //	}
 //}
+////EXERCISE 3//
+#define SIZE 30
 
-////EXERCISE4//
-typedef enum{January=1,February,March,April,May,June,July,August,September,October,November,December}month;
-#define SIZE 10
-#define BUFFER 128
-typedef enum{FEMALE,MALE}Sex;
 typedef struct {
-	int day;
-	int month;
+	char *bookName;
+	char *name;
+	int numOfPages;
+	int numOfPhotos;
 	int year;
-}Birthday;
-typedef struct {
-	char* name;
-	char* surname;
-	Sex gender;
-	Birthday list;
-	char id[SIZE];
-}Person;
+	Book *next;
+}Book;
 
-
-
-void getPerson(Person*,int);
-void printPerson(Person* , int);
-Person* alloc1D(int*);
-void freePerson(Person **, int);
+Book* addBook(Book*, int);
 
 int main() {
-	Person *pPerson = NULL;
-	int size, i;
-	pPerson = alloc1D(&size);
-	for (i = 0; i < size; ++i) {
-		getPerson(&pPerson[i], i);
-	}
-	for (i = 0; i < size; ++i) {
-		printPerson(pPerson+i, i);
-	}
-	for (i = 0; i < size; ++i) {
-		if ((pPerson+i)->list.month == January)
-			printPerson(pPerson + i, i);
-	}
-	freePerson(&pPerson, size);
-	free(pPerson);
+	Book *head=NULL;
+	head = (Book*)malloc(sizeof(Book));
 	return 0;
 }
-void freePerson(Person **p, int size) {
-	int i;
-	for (i = 0; i < size; ++i) {
-		free((*p+i)->name);
-		free((*p+i)->surname);
-	}
+Book* addBook(Book* head, int value) {
+	Book* newBook;
+	newBook = (Book*)malloc(sizeof(Book));
+	newBook->
 }
 
-Person* alloc1D(int *size) {
-	Person *pPerson = NULL;
-	printf("enter number of Persons: ");
-	scanf("%d", size);
-	pPerson = (Person*)malloc(*size * sizeof(Person));
-	if (!pPerson)
-		puts("error allocate struct");
-	return pPerson;
-}
-void getPerson(Person* p, int index) {
-	printf("enter details for %d Person\n", index + 1);
-	getchar();
-	char buffer[BUFFER];
-	printf("enter Person name: ");
-	scanf("%[^\n]", buffer);
-	getchar();
-	p->name = (char*)malloc(strlen(buffer) + 1);
-	strcpy(p->name, buffer);
-	printf("enter Person surname : ");
-	scanf("%[^\n]", buffer);
-	getchar();
-	p->surname = (char*)malloc(strlen(buffer) + 1);
-	strcpy(p->surname, buffer);
-	printf("enter ID: ");
-	scanf("%[^\n]", p->id);
-	getchar();
-	do {
-		printf("enter Gender 1 for male 0 for female\n");
-		scanf("%d", &p->gender);
-	} while (p->gender <0 || p->gender > 1);
-	printf("enter Birthday: day,month,year\n");
-	scanf("%d", &p->list.day);
-	scanf("%d", &p->list.month);
-	scanf("%d", &p->list.year);
-}
-
-void printPerson(Person* p, int index) {
-	printf("Details for Person %d :\n", index + 1);
-	printf("Person name: %s\n", p->name);
-	printf("Person surname: %s\n", p->surname);
-	printf("Person ID: %s\n", p->id);
-	printf("Person Birthday %d/%d/%d\n", p->list.day, p->list.month, p->list.year);
-	printf("Person Gender: ");
-	if (p->gender == 0)
-		printf("Female");
-	else
-		printf("Male");
-	printf("\n");
-}
+////EXERCISE4//
+//
+//typedef enum{January=1,February,March,April,May,June,July,August,September,October,November,December}month;
+//#define SIZE 10
+//#define BUFFER 128
+//typedef enum{FEMALE,MALE}Sex;
+//typedef struct {
+//	int day;
+//	int month;
+//	int year;
+//}Birthday;
+//typedef struct {
+//	char* name;
+//	char* surname;
+//	Sex gender;
+//	Birthday list;
+//	char id[SIZE];
+//}Person;
+//
+//
+//
+//void getPerson(Person*,int);
+//void printPerson(Person* , int);
+//Person* alloc1D(int*);
+//void freePerson(Person **, int);
+//
+//int main() {
+//	Person *pPerson = NULL;
+//	int size, i;
+//	pPerson = alloc1D(&size);
+//	for (i = 0; i < size; ++i) {
+//		getPerson(&pPerson[i], i);
+//	}
+//	for (i = 0; i < size; ++i) {
+//		printPerson(pPerson+i, i);
+//	}
+//	for (i = 0; i < size; ++i) {
+//		if ((pPerson+i)->list.month == January)
+//			printPerson(pPerson + i, i);
+//	}
+//	freePerson(&pPerson, size);
+//	free(pPerson);
+//	return 0;
+//}
+//void freePerson(Person **p, int size) {
+//	int i;
+//	for (i = 0; i < size; ++i) {
+//		free((*p+i)->name);
+//		free((*p+i)->surname);
+//	}
+//}
+//
+//Person* alloc1D(int *size) {
+//	Person *pPerson = NULL;
+//	printf("enter number of Persons: ");
+//	scanf("%d", size);
+//	pPerson = (Person*)malloc(*size * sizeof(Person));
+//	if (!pPerson)
+//		puts("error allocate struct");
+//	return pPerson;
+//}
+//void getPerson(Person* p, int index) {
+//	printf("enter details for %d Person\n", index + 1);
+//	getchar();
+//	char buffer[BUFFER];
+//	printf("enter Person name: ");
+//	scanf("%[^\n]", buffer);
+//	getchar();
+//	p->name = (char*)malloc(strlen(buffer) + 1);
+//	strcpy(p->name, buffer);
+//	printf("enter Person surname : ");
+//	scanf("%[^\n]", buffer);
+//	getchar();
+//	p->surname = (char*)malloc(strlen(buffer) + 1);
+//	strcpy(p->surname, buffer);
+//	printf("enter ID: ");
+//	scanf("%[^\n]", p->id);
+//	getchar();
+//	do {
+//		printf("enter Gender 1 for male 0 for female\n");
+//		scanf("%d", &p->gender);
+//	} while (p->gender <0 || p->gender > 1);
+//	printf("enter Birthday: day,month,year\n");
+//	scanf("%d", &p->list.day);
+//	scanf("%d", &p->list.month);
+//	scanf("%d", &p->list.year);
+//}
+//
+//void printPerson(Person* p, int index) {
+//	printf("Details for Person %d :\n", index + 1);
+//	printf("Person name: %s\n", p->name);
+//	printf("Person surname: %s\n", p->surname);
+//	printf("Person ID: %s\n", p->id);
+//	printf("Person Birthday %d/%d/%d\n", p->list.day, p->list.month, p->list.year);
+//	printf("Person Gender: ");
+//	if (p->gender == 0)
+//		printf("Female");
+//	else
+//		printf("Male");
+//	printf("\n");
+//}
