@@ -212,7 +212,8 @@
 //	}
 //}
 
-////EXERCISE3//
+////EXERCISE4//
+typedef enum{January=1,February,March,April,May,June,July,August,September,October,November,December}month;
 #define SIZE 10
 #define BUFFER 128
 typedef enum{FEMALE,MALE}Sex;
@@ -234,6 +235,7 @@ typedef struct {
 void getPerson(Person*,int);
 void printPerson(Person* , int);
 Person* alloc1D(int*);
+void freePerson(Person **, int);
 
 int main() {
 	Person *pPerson = NULL;
@@ -245,9 +247,22 @@ int main() {
 	for (i = 0; i < size; ++i) {
 		printPerson(pPerson+i, i);
 	}
+	for (i = 0; i < size; ++i) {
+		if ((pPerson+i)->list.month == January)
+			printPerson(pPerson + i, i);
+	}
+	freePerson(&pPerson, size);
 	free(pPerson);
 	return 0;
 }
+void freePerson(Person **p, int size) {
+	int i;
+	for (i = 0; i < size; ++i) {
+		free((*p+i)->name);
+		free((*p+i)->surname);
+	}
+}
+
 Person* alloc1D(int *size) {
 	Person *pPerson = NULL;
 	printf("enter number of Persons: ");
