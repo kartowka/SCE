@@ -59,6 +59,7 @@
 
 ////EXERCISE2//
 #define SIZE 30
+typedef enum{FALSE,TRUE}Boolean;
 typedef struct {
 	int ID;
 	char *name;
@@ -81,6 +82,7 @@ int main() {
 	filename[strlen(filename) - 1] = '\0';
 	fp = fopen(filename, "w+");
 	pStd=alloc1D(&size);
+	fprintf(fp, "%-9s %-16s %s\n", "ID", "NAME", "TELEPHONE");
 	for (i = 0; i < size; ++i)
 		getStudent(fp,&pStd[i], i);
 	fclose(fp);
@@ -101,16 +103,35 @@ void printFromFile(FILE* fp) {
 	rewind(fp);
 
 }
-void printByID(FILE* fp,int ID) {
-	char ch;
-	int idcheck;
-	while (!feof(fp)) {
-		if ((fscanf(fp, "%d", &idcheck)) == ID) {
-			while (ch = fgetc(fp) != '\n')
-				printf("%c", ch);
+void printByID(FILE* fp, int ID) {
+	int idCheck, len=0,check=ID;
+	Boolean flag = FALSE;
+	char c;
+	while (check != 0) {
+		check /= 10;
+		len++;
+	}
+	for (c = getc(fp); c != '\n'; c = getc(fp)); //newline
+	fscanf(fp, "%d", &idCheck);//search for number
+	while (!feof(fp)&&flag==FALSE) {
+		if(idCheck==ID) {
+			fseek(fp,-len,SEEK_CUR); //return len of id
+			for (c = getc(fp); c != '\n'; c = getc(fp)) { //print line
+				printf("%c", c);
+			}
+			flag = TRUE; //exit
+		}
+		else {
+			for (c = getc(fp); c != '\n'; c = getc(fp)); //newline
+			fscanf(fp, "%d", &idCheck); //search for number
+			if (feof(fp)) { //exit case if not found
+				printf("ID not found\n");
+				flag = TRUE;
+			}
 		}
 	}
 }
+
 void freeStr(Student* p, int size) {
 	int i;
 	for (i = 0; i < size; ++i) {
