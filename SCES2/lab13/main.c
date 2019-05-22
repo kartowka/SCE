@@ -173,42 +173,52 @@
 ////EXERCISE3//
 
 typedef enum{FALSE,TRUE}Boolean;
+#define SIZE 30
+#define MINSIZEOFSTRING 6
+void openfiles(FILE **, FILE**);
+void closefiles(FILE*, FILE*);
+void readline(FILE*,FILE*, char*);
 
 int main() {
 	FILE *input = NULL, *output = NULL;
 	Boolean flag = FALSE;
-	char c;
-	int count=0;
-	input = fopen("input.txt", "r");
-	if (!input) {
-		printf("Cannot open file,file not found!\n");
+	char str[SIZE];
+	openfiles(&input, &output);
+	while (!feof(input)) {
+		readline(output, input, str);
+	}
+	closefiles(input, output);
+}
+
+void readline(FILE* output, FILE* input, char* string) {
+	int i=0;
+	fgets(string, SIZE, input);
+	string[strlen(string)] = '\0';
+	if (strlen(string) < MINSIZEOFSTRING)
+		return;
+	if (string[i] >= 'A'&&string[i] <= 'Z') {
+		++i;
+		for (i; string[i]!='\0';++i) {
+			if (string[i] >= 'A'&&string[i] <= 'Z')
+				return;
+		}
+		fprintf(output, "%s", string);
+	}
+}
+void openfiles(FILE **input, FILE**output){
+	char inputfile[10] = "input.txt",outputfile[11]="output.txt";
+	printf("open file for read %s\n",inputfile);
+	*input = fopen(inputfile, "r");
+	if (!*input) {
+		printf("Cannot open file %s,file not found!\n",inputfile);
 		exit(1);
 	}
-	output = fopen("output.txt", "w");
-	while (!feof(input)&&flag == FALSE) {
-		c = getc(input);
-		if (c >= 'A'&&c <= 'Z'){
-			count++;
-			for (c = getc(input); c != '\n'; c = getc(input)) {
-				if ((c >= 'A'&&c <= 'Z')) {
-					count = 0;
-					break;
-				}
-				else
-					count++;
-			}
-			fseek(input, -count, SEEK_CUR);
-			if (count >= 5) {
-				for (c = getc(input); c != '\n'; c = getc(input))
-					fprintf(output, "%c",c);
-				fclose(output);
-				count = 0;
-			}
-			else
-				for (c = getc(input); c != '\n'; c = getc(input));
-		}
-		if (feof(input))
-			flag = TRUE;
-	}
-	fclose(input); fclose(output);
+	printf("open file for write %s\n", outputfile);
+	*output = fopen(outputfile, "w");
+}
+
+void closefiles(FILE*input, FILE*output) {
+	printf("closing files\n");
+	fclose(input);
+	fclose(output);
 }
