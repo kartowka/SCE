@@ -58,167 +58,170 @@
 //}
 
 ////EXERCISE2//
-//#define SIZE 30
-//typedef enum{FALSE,TRUE}Boolean;
-//typedef struct {
-//	int ID;
-//	char *name;
-//	char *tel;
-//}Student;
-//
-//Student* alloc1D(int *);
-//void getStudent(FILE*,Student*, int);
-//void freeStr(Student*, int);
-//void printFromFile(FILE*);
-//void printByID(FILE*, int);
-//
-//int main() {
-//	FILE *fp;
-//	Student *pStd=NULL;
-//	int size,i,ID;
-//	char filename[SIZE];
-//	puts("enter filename");
-//	fgets(filename, SIZE, stdin);
-//	filename[strlen(filename) - 1] = '\0';
-//	fp = fopen(filename, "w+");
-//	pStd=alloc1D(&size);
-//	fprintf(fp, "%-9s %-16s %s\n", "ID", "NAME", "TELEPHONE");
-//	for (i = 0; i < size; ++i)
-//		getStudent(fp,&pStd[i], i);
-//	fclose(fp);
-//	fp = fopen(filename, "r");
-//	printFromFile(fp);
-//	printf("enter ID you like to print\n");
-//	scanf("%d", &ID);
-//	printByID(fp,ID);
-//	freeStr(pStd, size);
-//	fclose(fp);
-//	return 0;
-//}
-//void printFromFile(FILE* fp) {
-//	char ch;
-//	printf("The contents of the file are:\n");
-//	while ((ch = fgetc(fp)) != EOF)
-//		printf("%c", ch);
-//	rewind(fp);
-//
-//}
-//void printByID(FILE* fp, int ID) {
-//	int idCheck, len=0,check=ID;
-//	Boolean flag = FALSE;
-//	char c;
-//	while (check != 0) {
-//		check /= 10;
-//		len++;
-//	}
-//	for (c = getc(fp); c != '\n'; c = getc(fp)); //newline
-//	fscanf(fp, "%d", &idCheck);//search for number
-//	while (!feof(fp)&&flag==FALSE) {
-//		if(idCheck==ID) {
-//			fseek(fp,-len,SEEK_CUR); //return len of id
-//			for (c = getc(fp); c != '\n'; c = getc(fp)) { //print line
-//				printf("%c", c);
-//			}
-//			flag = TRUE; //exit
-//		}
-//		else {
-//			for (c = getc(fp); c != '\n'; c = getc(fp)); //newline
-//			fscanf(fp, "%d", &idCheck); //search for number
-//			if (feof(fp)) { //exit case if not found
-//				printf("ID not found\n");
-//				flag = TRUE;
-//			}
-//		}
-//	}
-//}
-//
-//void freeStr(Student* p, int size) {
-//	int i;
-//	for (i = 0; i < size; ++i) {
-//		free((p)[i].name);
-//		free((p)[i].tel);
-//	}
-//	free(p);
-//}
-//
-//Student* alloc1D(int *size) {
-//	Student *pStd = NULL;
-//	puts("enter number of students you would like to add");
-//	scanf("%d", size);
-//	pStd = (Student*)malloc(*size * sizeof(Student));
-//	if (!pStd)
-//		printf("error allocate struct!\n");
-//	return pStd;
-//}
-//
-//void getStudent(FILE* fp,Student* p, int index) {
-//	char buffer[SIZE];
-//	printf("enter details for student %d\n", index + 1);
-//	printf("enter student ID:");
-//	scanf("%d", &p->ID);
-//	getchar();
-//	printf("enter student name:");
-//	scanf("%[^\n]", buffer);
-//	p->name = (char*)malloc(strlen(buffer) + 1);
-//	strcpy(p->name, buffer);
-//	getchar();
-//	printf("enter student telephone number:");
-//	scanf("%[^\n]", buffer);
-//	p->tel = (char*)malloc(strlen(buffer) + 1);
-//	strcpy(p->tel, buffer);
-//	fprintf(fp, "%d %s %s\n", p->ID,p->name,p->tel);
-//}
+#define SIZE 30
+typedef enum{FALSE,TRUE}Boolean;
+
+typedef struct {
+	int ID;
+	char *name;
+	char *tel;
+}Student;
+
+Student* alloc1D(int *);
+void getStudent(FILE*,Student*, int);
+void freeStr(Student*, int);
+void printFromFile(FILE*);
+void printByID(FILE*, int);
+
+int main() {
+	FILE *fp;
+	Student *pStd=NULL;
+	int size,i,ID;
+	char filename[SIZE];
+	puts("enter filename");
+	fgets(filename, SIZE, stdin);
+	filename[strlen(filename) - 1] = '\0';
+	fp = fopen(filename, "w+");
+	pStd=alloc1D(&size);
+	fprintf(fp, "%-9s %-16s %s\n", "ID", "NAME", "TELEPHONE");
+	for (i = 0; i < size; ++i)
+		getStudent(fp,&pStd[i], i);
+	fclose(fp);
+	fp = fopen(filename, "r");
+	printFromFile(fp);
+	printf("enter ID you like to print\n");
+	scanf("%d", &ID);
+	printByID(fp,ID);
+	freeStr(pStd, size);
+	fclose(fp);
+	return 0;
+}
+void printFromFile(FILE* fp) {
+	char ch;
+	printf("The contents of the file are:\n");
+	while ((ch = fgetc(fp)) != EOF)
+		printf("%c", ch);
+	rewind(fp);
+
+}
+void printByID(FILE* fp, int ID) {
+	int idCheck, len=0,check=ID;
+	Boolean flag = FALSE;
+	char c;
+	while (check != 0) {
+		check /= 10;
+		len++;
+	}
+	for (c = getc(fp); c != '\n'; c = getc(fp)); //newline
+	fscanf(fp, "%d", &idCheck);//search for number
+	while (!feof(fp)&&flag==FALSE) {
+		if(idCheck==ID) {
+			fseek(fp,-len,SEEK_CUR); //return len of id
+			for (c = getc(fp); c != '\n'; c = getc(fp)) { //print line
+				printf("%c", c);
+			}
+			flag = TRUE; //exit
+		}
+		else {
+			for (c = getc(fp); c != '\n'; c = getc(fp)); //newline
+			fscanf(fp, "%d", &idCheck); //search for number
+			if (feof(fp)) { //exit case if not found
+				printf("ID not found\n");
+				flag = TRUE;
+			}
+		}
+	}
+}
+
+void freeStr(Student* p, int size) {
+	int i;
+	for (i = 0; i < size; ++i) {
+		free((p)[i].name);
+		free((p)[i].tel);
+	}
+	free(p);
+}
+
+Student* alloc1D(int *size) {
+	Student *pStd = NULL;
+	puts("enter number of students you would like to add");
+	scanf("%d", size);
+	pStd = (Student*)malloc(*size * sizeof(Student));
+	if (!pStd)
+		printf("error allocate struct!\n");
+	return pStd;
+}
+
+void getStudent(FILE* fp,Student* p, int index) {
+	char buffer[SIZE];
+	printf("enter details for student %d\n", index + 1);
+	printf("enter student ID:");
+	scanf("%d", &p->ID);
+	getchar();
+	printf("enter student name:");
+	scanf("%[^\n]", buffer);
+	p->name = (char*)malloc(strlen(buffer) + 1);
+	strcpy(p->name, buffer);
+	getchar();
+	printf("enter student telephone number:");
+	scanf("%[^\n]", buffer);
+	p->tel = (char*)malloc(strlen(buffer) + 1);
+	strcpy(p->tel, buffer);
+	fprintf(fp, "%d %s %s\n", p->ID,p->name,p->tel);
+}
 
 
 ////EXERCISE3//
-
-typedef enum{FALSE,TRUE}Boolean;
-#define SIZE 30
-#define MINSIZEOFSTRING 6
-void openfiles(FILE **, FILE**);
-void closefiles(FILE*, FILE*);
-void readline(FILE*,FILE*, char*);
-
-int main() {
-	FILE *input = NULL, *output = NULL;
-	Boolean flag = FALSE;
-	char str[SIZE];
-	openfiles(&input, &output);
-	while (!feof(input)) {
-		readline(output, input, str);
-	}
-	closefiles(input, output);
-}
-
-void readline(FILE* output, FILE* input, char* string) {
-	int i=0;
-	fgets(string, SIZE, input);
-	string[strlen(string)] = '\0';
-	if (strlen(string) < MINSIZEOFSTRING)
-		return;
-	if (string[i] >= 'A'&&string[i] <= 'Z') {
-		++i;
-		for (i; string[i]!='\0';++i) {
-			if (string[i] >= 'A'&&string[i] <= 'Z')
-				return;
-		}
-		fprintf(output, "%s", string);
-	}
-}
-void openfiles(FILE **input, FILE**output){
-	char inputfile[10] = "input.txt",outputfile[11]="output.txt";
-	printf("open file for read %s\n",inputfile);
-	*input = fopen(inputfile, "r");
-	if (!*input) {
-		printf("Cannot open file %s,file not found!\n",inputfile);
-		exit(1);
-	}
-	printf("open file for write %s\n", outputfile);
-	*output = fopen(outputfile, "w");
-}
-
-void closefiles(FILE*input, FILE*output) {
-	printf("closing files\n");
-	fclose(input);
-	fclose(output);
-}
+//
+//typedef enum{FALSE,TRUE}Boolean;
+//#define SIZE 30
+//#define MINSIZEOFSTRING 2
+//
+//
+//void openfiles(FILE **, FILE**);
+//void closefiles(FILE*, FILE*);
+//void readline(FILE*,FILE*, char*);
+//
+//int main() {
+//	FILE *input = NULL, *output = NULL;
+//	Boolean flag = FALSE;
+//	char str[SIZE];
+//	openfiles(&input, &output);
+//	while (!feof(input)) {
+//		readline(output, input, str);
+//	}
+//	closefiles(input, output);
+//}
+//
+//void readline(FILE* output, FILE* input, char* string) {
+//	int i=0;
+//	fgets(string, SIZE, input);
+//	string[strlen(string)] = '\0';
+//	if (strlen(string) < MINSIZEOFSTRING)
+//		return;
+//	if (string[i] >= 'A'&&string[i] <= 'Z') {
+//		++i;
+//		for (i; string[i]!='\0';++i) {
+//			if (string[i] >= 'A'&&string[i] <= 'Z')
+//				return;
+//		}
+//		fprintf(output, "%s", string);
+//	}
+//}
+//void openfiles(FILE **input, FILE**output){
+//	char inputfile[10] = "input.txt",outputfile[11]="output.txt";
+//	printf("open file for read %s\n",inputfile);
+//	*input = fopen(inputfile, "r");
+//	if (!*input) {
+//		printf("Cannot open file %s,file not found!\n",inputfile);
+//		exit(1);
+//	}
+//	printf("open file for write %s\n", outputfile);
+//	*output = fopen(outputfile, "w");
+//}
+//
+//void closefiles(FILE*input, FILE*output) {
+//	printf("closing files\n");
+//	fclose(input);
+//	fclose(output);
+//}
