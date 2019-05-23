@@ -54,16 +54,132 @@ void printWorker(Person*);
 void freeCompany(Company*);
 void freeDepartment(Department*);
 void freeWorker(Person*);
+void writeToFile(FILE**, Company*);
+void readFromFile(FILE*, Company**);
 
 //MAIN//
 int main() {
 	Company *cmp = NULL;
-	getCompany(&cmp);
+	FILE *fp = NULL;
+	int choice;
+	do {
+		printf("Please enter your choice: \n");
+		printf("1 Read a company from keyboard\n");
+		printf("2 Read a company from file\n");
+		printf("3 Add a department to the company\n");
+		printf("4 Write the company to file\n");
+		printf("5 Recursive menu\n");
+		printf("6 Exit\n");
+		scanf("%d", &choice);
+	} while (choice < 0 || choice>6);
+	switch (choice) {
+	case 1: {
+		getCompany(&cmp);
+		break;
+	}
+	case 2: {
+		readFromFile(fp, &cmp);
+		break;
+	}
+	case 3:
+	case 4: {
+		writeToFile(&fp, cmp);
+		break;
+	}
+	case 5: {
+		break;
+	}
+	case 6: {
+		printf("Good bye\n");
+		return 0; 
+	}
+	}
+	readFromFile(fp, &cmp);
 	printCompany(cmp);
 	freeCompany(cmp);
 	return 0;
 }
 //FUNCTIONS//
+void readFromFile(FILE* fp, Company** cmp) {
+	*cmp = (Company*)malloc(sizeof(Company));
+	char filename[buffer];
+	char buf[buffer];
+	int i, j;
+	printf("enter filename\n");
+	scanf("%s", filename);
+	filename[strlen(filename)] = '\0';
+	fp = fopen(filename, "r");
+	if (!fp) {
+		printf("error open file,file not found!\n");
+		exit(1);
+	}
+	fscanf(fp, "%s", buf);
+	(*cmp)->CEO.name = (char*)malloc(strlen(buf) + 1);
+	strcpy((*cmp)->CEO.name, buf);
+	fscanf(fp, "%d", &(*cmp)->CEO.date.Day);
+	fscanf(fp, "%d", &(*cmp)->CEO.date.Month);
+	fscanf(fp, "%d", &(*cmp)->CEO.date.Year);
+	fscanf(fp, "%d", &(*cmp)->numOfDepartment);
+	(*cmp)->department = (Department*)malloc((*cmp)->numOfDepartment * sizeof(Department));
+	Department* dep = (*cmp)->department;
+	for (i = 0; i < (*cmp)->numOfDepartment; ++i) {
+		fscanf(fp, "%s", buf);
+		(dep+i)->departmentName = (char*)malloc(strlen(buf) + 1);
+		strcpy((dep + i)->departmentName, buf);
+		fscanf(fp, "%s", buf);
+		(dep + i)->BossDepartment.name = (char*)malloc(strlen(buf) + 1);
+		strcpy((dep + i)->BossDepartment.name, buf);
+		fscanf(fp, "%d", &(dep + i)->BossDepartment.date.Day);
+		fscanf(fp, "%d", &(dep + i)->BossDepartment.date.Month);
+		fscanf(fp, "%d", &(dep + i)->BossDepartment.date.Year);
+		fscanf(fp, "%d", &(dep + i)->numOfWorkers);
+		(dep + i)->workers = (Person*)malloc((dep + i)->numOfWorkers * sizeof(Person));
+		Person* worker = (dep + i)->workers;
+		for (j = 0; j < (dep + i)->numOfWorkers; ++j) {
+			fscanf(fp, "%s", buf);
+			(worker + j)->name = (char*)malloc(strlen(buf) + 1);
+			strcpy((worker + j)->name, buf);
+			fscanf(fp, "%d", &(worker + j)->date.Day);
+			fscanf(fp, "%d", &(worker + j)->date.Month);
+			fscanf(fp, "%d", &(worker + j)->date.Year);
+		}
+	}
+	fclose(fp);
+}
+void writeToFile(FILE** fp, Company* cmp) {
+	Department* dep = cmp->department;
+	char filename[buffer];
+	int i, j;
+	printf("enter filename\n");
+	scanf("%s", filename);
+	filename[strlen(filename) - 1] = '\0';
+	*fp = fopen(filename, "w+");
+	if (!*fp) {
+		printf("error open file!");
+		return;
+	}
+	fprintf(*fp, "%s\n", cmp->CEO.name);
+	fprintf(*fp, "%d\n", cmp->CEO.date.Day);
+	fprintf(*fp, "%d\n", cmp->CEO.date.Month);
+	fprintf(*fp, "%d\n", cmp->CEO.date.Year);
+	fprintf(*fp, "%d\n", cmp->numOfDepartment);
+	for (i = 0; i < cmp->numOfDepartment; ++i) {
+		fprintf(*fp, "%s\n", (dep+i)->departmentName);
+		fprintf(*fp, "%s\n", (dep + i)->BossDepartment.name);
+		fprintf(*fp, "%d\n", (dep + i)->BossDepartment.date.Day);
+		fprintf(*fp, "%d\n", (dep + i)->BossDepartment.date.Month);
+		fprintf(*fp, "%d\n", (dep + i)->BossDepartment.date.Year);
+		fprintf(*fp, "%d\n", (dep + i)->numOfWorkers);
+		Person* worker = (dep + i)->workers;
+		for (j = 0; j < (dep + i)->numOfWorkers; ++j) {
+			fprintf(*fp, "%s\n",(worker+j)->name);
+			fprintf(*fp, "%d\n", (worker + j)->date.Day);
+			fprintf(*fp, "%d\n", (worker + j)->date.Month);
+			fprintf(*fp, "%d\n", (worker + j)->date.Year);
+		}
+	}
+	fclose(*fp);
+}
 void freeCompany(Company* cmp) {
 	int i;
 	for (i = 0; i < cmp->numOfDepartment; ++i) {
