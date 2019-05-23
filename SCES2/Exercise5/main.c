@@ -12,6 +12,9 @@ Author: Anthony Eitan Fleysher, ID: 203192331
 
 //DEFINE COMMANDS//
 #define buffer 20
+#define MENUMIN 1
+#define RECURSIVEMAX 5
+#define MENUMAX 6
 #define MONTHLOW 1
 #define MONTHHIGH 12
 #define DAYHIGH 31
@@ -56,50 +59,114 @@ void freeDepartment(Department*);
 void freeWorker(Person*);
 void writeToFile(FILE**, Company*);
 void readFromFile(FILE*, Company**);
+void addDepartment(Company**);
+void recursiveMenu();
 
 //MAIN//
 int main() {
 	Company *cmp = NULL;
 	FILE *fp = NULL;
 	int choice;
-	do {
-		printf("Please enter your choice: \n");
-		printf("1 Read a company from keyboard\n");
-		printf("2 Read a company from file\n");
-		printf("3 Add a department to the company\n");
-		printf("4 Write the company to file\n");
-		printf("5 Recursive menu\n");
-		printf("6 Exit\n");
-		scanf("%d", &choice);
-	} while (choice < 0 || choice>6);
-	switch (choice) {
-	case 1: {
-		getCompany(&cmp);
-		break;
+	for (;;) {
+		do {
+			printf("Please enter your choice: \n");
+			printf("1 Read a company from keyboard\n");
+			printf("2 Read a company from file\n");
+			printf("3 Add a department to the company\n");
+			printf("4 Write the company to file\n");
+			printf("5 Recursive menu\n");
+			printf("6 Exit\n");
+			printf("enter choice: ");
+			scanf("%d", &choice);
+		} while (choice < MENUMIN || choice>MENUMAX);
+		switch (choice) {
+		case 1: {
+			getCompany(&cmp);
+			printCompany(cmp);
+			break;
+		}
+		case 2: {
+			readFromFile(fp, &cmp);
+			printCompany(cmp);
+			break;
+		}
+		case 3: {
+			if (cmp == NULL) {
+				printf("there is no company set yet\n\n");
+				break;
+			}
+			else {
+				addDepartment(&cmp);
+				printCompany(cmp);
+				break;
+			}
+		}
+		case 4: {
+			writeToFile(&fp, cmp);
+			break;
+		}
+		case 5: {
+			recursiveMenu();
+			break;
+		}
+		case 6: {
+			if (cmp == NULL) {
+				printf("Good bye\n");
+				return 0;
+			}
+			else {
+				freeCompany(cmp);
+				printf("Good bye\n");
+				return 0;
+			}
+		}
+		}
 	}
-	case 2: {
-		readFromFile(fp, &cmp);
-		break;
-	}
-	case 3:
-	case 4: {
-		writeToFile(&fp, cmp);
-		break;
-	}
-	case 5: {
-		break;
-	}
-	case 6: {
-		printf("Good bye\n");
-		return 0; 
-	}
-	}
-	readFromFile(fp, &cmp);
-	printCompany(cmp);
-	freeCompany(cmp);
-	return 0;
 }
 //FUNCTIONS//
+void recursiveMenu() {
+	int choice;
+	printf("Welcome to recursive Menu: \n\n");
+	for (;;) {
+		do {
+			printf("Please enter your choice: \n");
+			printf("1 function to sum even odd\n");
+			printf("2 decimal to binary\n");
+			printf("3 binary string to decimal\n");
+			printf("4 print upper letter from string\n");
+			printf("5 Exit recursive menu\n");
+			printf("enter choice: ");
+			scanf("%d", &choice);
+		} while (choice < MENUMIN || choice>RECURSIVEMAX);
+		switch (choice) {
+		case 1: {
+			break;
+		}
+		case 2: {
+			break;
+		}
+		case 3: {
+			break;
+		}
+		case 4: {
+			break;
+		}
+		case 5: {
+			printf("Exit recursive menu\n");
+			return;
+		}
+		}
+	}
+}
+void addDepartment(Company** cmp) {
+	int newAdd = (*cmp)->numOfDepartment;
+	(*cmp)->numOfDepartment += 1;
+	(*cmp)->department = (Department*)realloc((*cmp)->department, sizeof(Department)*(*cmp)->numOfDepartment);
+	Department* dep = (*cmp)->department;
+	printf("enter department name:\n");
+	while ((getchar()) != '\n');
+	getDepartment(dep + newAdd);
+}
 void readFromFile(FILE* fp, Company** cmp) {
 	*cmp = (Company*)malloc(sizeof(Company));
 	char filename[buffer];
@@ -111,7 +178,7 @@ void readFromFile(FILE* fp, Company** cmp) {
 	fp = fopen(filename, "r");
 	if (!fp) {
 		printf("error open file,file not found!\n");
-		exit(1);
+		return;
 	}
 	fscanf(fp, "%s", buf);
 	(*cmp)->CEO.name = (char*)malloc(strlen(buf) + 1);
@@ -152,7 +219,7 @@ void writeToFile(FILE** fp, Company* cmp) {
 	int i, j;
 	printf("enter filename\n");
 	scanf("%s", filename);
-	filename[strlen(filename) - 1] = '\0';
+	filename[strlen(filename)] = '\0';
 	*fp = fopen(filename, "w+");
 	if (!*fp) {
 		printf("error open file!");
