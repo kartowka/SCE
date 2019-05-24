@@ -61,9 +61,24 @@ void writeToFile(FILE**, Company*);
 void readFromFile(FILE*, Company**);
 void addDepartment(Company**);
 void recursiveMenu();
+void mainMenu();
+//RECURSIVE FUNCTION//
+void getNumber(int*);
+int SumEvenOdd(int);
+void decToBinary(int);
+void getStr(char**);
+int binaryToDec(int);
+void printUpperLetter(char*);
+int stringToInt(char*);
 
 //MAIN//
 int main() {
+	mainMenu();
+	return 0;
+}
+//MAINMENU//
+
+void mainMenu() {
 	Company *cmp = NULL;
 	FILE *fp = NULL;
 	int choice;
@@ -112,18 +127,19 @@ int main() {
 		case 6: {
 			if (cmp == NULL) {
 				printf("Good bye\n");
-				return 0;
+				return;
 			}
 			else {
 				freeCompany(cmp);
 				printf("Good bye\n");
-				return 0;
+				return;
 			}
 		}
 		}
 	}
 }
-//FUNCTIONS//
+
+//RECURSIVEMENU//
 void recursiveMenu() {
 	int choice;
 	printf("Welcome to recursive Menu: \n\n");
@@ -140,15 +156,31 @@ void recursiveMenu() {
 		} while (choice < MENUMIN || choice>RECURSIVEMAX);
 		switch (choice) {
 		case 1: {
+			int num=0;
+			getNumber(&num);
+			printf("%d\n", SumEvenOdd(num));
 			break;
 		}
 		case 2: {
+			int num=0;
+			getNumber(&num);
+			decToBinary(num);
 			break;
 		}
 		case 3: {
+			char *str=NULL;
+			int num=0;
+			getStr(&str);
+			num=stringToInt(str);
+			//printf("%d\n",binaryToDec(num));
+			free(str);
 			break;
 		}
 		case 4: {
+			char *str = NULL;
+			getStr(&str);
+			printUpperLetter(str);
+			free(str);
 			break;
 		}
 		case 5: {
@@ -158,6 +190,57 @@ void recursiveMenu() {
 		}
 	}
 }
+//RECURSIVE FUNCTION//
+
+void getStr(char **str) {
+	char buf[buffer];
+	printf("enter string: ");
+	scanf("%s", buf);
+	*str = (char*)malloc(strlen(buf) + 1);
+	strcpy(*str, buf);
+}
+void printUpperLetter(char* str) {
+	if (*str) {
+		if (*str >= 'A'&&*str <= 'Z')
+			printf("%c", *str);
+		printUpperLetter(str + 1);
+	}
+}
+//int binaryToDec(int num) {
+//	if (*str == '\0')
+//		return 0;
+//	return (*str-'0') % 10 + 2 * binaryToDec(str+1);
+//}
+int stringToInt(char*str) {
+	if (*str == '\0')
+		return 1;
+	if (*str) {
+		return (stringToInt(str+1))*10+(*str - '0');
+	}
+}
+void getNumber(int* num) {
+	printf("Please enter a number: ");
+	scanf("%d", num);
+}
+int SumEvenOdd(int n) {
+	if (n == 0)
+		return 0;
+	if ((n%10) % 2 == 0)
+		return (n%10 + SumEvenOdd(n / 10));
+	if ((n % 10) % 2 != 0)
+		return (-n % 10 + SumEvenOdd(n / 10));
+	else
+		return 0;
+}
+void decToBinary(int n) {
+	if (n == 0)
+		return;
+	decToBinary(n / 2);
+	printf("%d",n%2);
+}
+
+//FUNCTIONS//
+
 void addDepartment(Company** cmp) {
 	int newAdd = (*cmp)->numOfDepartment;
 	(*cmp)->numOfDepartment += 1;
@@ -273,6 +356,7 @@ void getCompany(Company** company) {
 	printf("--------------------------\n");
 	printf("enter details: \n");
 	printf("enter CEO name:\n");
+	while ((getchar()) != '\n');
 	getPerson(&(*company)->CEO);
 	printf("enter number of Departments:\n");
 	scanf("%d", &(*company)->numOfDepartment);
