@@ -67,9 +67,10 @@ void getNumber(int*);
 int SumEvenOdd(int);
 void decToBinary(int);
 void getStr(char**);
-int binaryToDec(int);
+int binaryToDec(char*);
 void printUpperLetter(char*);
-int stringToInt(char*);
+int pow(int size);
+int stringCheck(char *str);
 
 //MAIN//
 int main() {
@@ -168,11 +169,13 @@ void recursiveMenu() {
 			break;
 		}
 		case 3: {
-			char *str=NULL;
-			int num=0;
+			char *str = NULL;
+			int num = 0;
 			getStr(&str);
-			num=stringToInt(str);
-			//printf("%d\n",binaryToDec(num));
+			if (stringCheck(str) != -1)
+				printf("%d\n", binaryToDec(str));
+			else
+				printf("-1\n");
 			free(str);
 			break;
 		}
@@ -206,17 +209,26 @@ void printUpperLetter(char* str) {
 		printUpperLetter(str + 1);
 	}
 }
-//int binaryToDec(int num) {
-//	if (*str == '\0')
-//		return 0;
-//	return (*str-'0') % 10 + 2 * binaryToDec(str+1);
-//}
-int stringToInt(char*str) {
+int stringCheck(char *str){
 	if (*str == '\0')
-		return 1;
-	if (*str) {
-		return (stringToInt(str+1))*10+(*str - '0');
+		return 0;
+	else if (*str) {
+		if (*str<'0' || *str>'1')
+			return -1;
 	}
+	return stringCheck(str + 1);
+}
+int binaryToDec(char *str) {
+	if (*str == '\0')
+		return 0;
+	int num = pow(strlen(str) - 1);
+	return (*str-'0')*num+binaryToDec(str+1);
+}
+int pow(int size) {
+	if (size == 0)
+		return 1;
+	else
+		return 2 * pow(size - 1);
 }
 void getNumber(int* num) {
 	printf("Please enter a number: ");
