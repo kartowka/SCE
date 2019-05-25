@@ -170,7 +170,6 @@ void recursiveMenu() {
 		}
 		case 3: {
 			char *str = NULL;
-			int num = 0;
 			getStr(&str);
 			if (stringCheck(str) != -1)
 				printf("%d\n", binaryToDec(str));
