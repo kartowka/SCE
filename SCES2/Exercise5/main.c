@@ -11,6 +11,7 @@ Author: Anthony Eitan Fleysher, ID: 203192331
 #include<stdlib.h>
 
 //DEFINE COMMANDS//
+#define POWNUM 2
 #define buffer 20
 #define MENUMIN 1
 #define RECURSIVEMAX 5
@@ -220,14 +221,14 @@ int stringCheck(char *str){
 int binaryToDec(char *str) {
 	if (*str == '\0')
 		return 0;
-	int num = pow(strlen(str) - 1);
+	int num = pow((int)(strlen(str) - 1));
 	return (*str-'0')*num+binaryToDec(str+1);
 }
 int pow(int size) {
 	if (size == 0)
 		return 1;
 	else
-		return 2 * pow(size - 1);
+		return POWNUM * pow(size - 1);
 }
 void getNumber(int* num) {
 	printf("Please enter a number: ");
@@ -268,7 +269,6 @@ void readFromFile(FILE* fp, Company** cmp) {
 	int i, j;
 	printf("enter filename\n");
 	scanf("%s", filename);
-	filename[strlen(filename)] = '\0';
 	fp = fopen(filename, "r");
 	if (!fp) {
 		printf("error open file,file not found!\n");
@@ -313,7 +313,6 @@ void writeToFile(FILE** fp, Company* cmp) {
 	int i, j;
 	printf("enter filename\n");
 	scanf("%s", filename);
-	filename[strlen(filename)] = '\0';
 	*fp = fopen(filename, "w+");
 	if (!*fp) {
 		printf("error open file!");
