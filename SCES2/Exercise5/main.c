@@ -11,6 +11,7 @@ Author: Anthony Eitan Fleysher, ID: 203192331
 #include<stdlib.h>
 
 //DEFINE COMMANDS//
+
 #define POWNUM 2
 #define buffer 20
 #define MENUMIN 1
@@ -21,31 +22,33 @@ Author: Anthony Eitan Fleysher, ID: 203192331
 #define DAYHIGH 31
 #define DAYLOW 1
 #define YEARLOW 1900
-typedef struct {
+
+typedef struct DOB{
 	int Day;
 	int Month;
 	int Year;
 }DOB;
 
-typedef struct {
+typedef struct Person{
 	char *name;
 	DOB date;
 }Person;
 
-typedef struct {
+typedef struct Department{
 	char *departmentName;
 	Person BossDepartment;
 	int numOfWorkers;
 	Person *workers;
 }Department;
 
-typedef struct {
+typedef struct Company{
 	Person CEO;
 	int numOfDepartment;
 	Department *department;
 }Company;
 
 //FUNCTION DECLARATION//
+
 void getPerson(Person*);
 void getDOB(DOB*);
 void getDepartment(Department*);
@@ -63,7 +66,9 @@ void readFromFile(FILE*, Company**);
 void addDepartment(Company**);
 void recursiveMenu();
 void mainMenu();
+
 //RECURSIVE FUNCTION//
+
 void getNumber(int*);
 int SumEvenOdd(int);
 void decToBinary(int);
@@ -74,6 +79,7 @@ int pow(int size);
 int stringCheck(char *str);
 
 //MAIN//
+
 int main() {
 	mainMenu();
 	return 0;
@@ -142,6 +148,7 @@ void mainMenu() {
 }
 
 //RECURSIVEMENU//
+
 void recursiveMenu() {
 	int choice;
 	printf("Welcome to recursive Menu: \n\n");
@@ -221,11 +228,11 @@ int stringCheck(char *str){
 int binaryToDec(char *str) {
 	if (*str == '\0')
 		return 0;
-	int num = pow((int)(strlen(str) - 1));
+	int num = pow((int)strlen(str));
 	return (*str-'0')*num+binaryToDec(str+1);
 }
 int pow(int size) {
-	if (size == 0)
+	if (size == 1)
 		return 1;
 	else
 		return POWNUM * pow(size - 1);
