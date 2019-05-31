@@ -234,7 +234,7 @@ FILE* getFile(FILE* fp, char *name) { //open file for write
 void addFlightToPerson(FILE* Names, FILE* Details, Person* Prs, int numbers_of_person, char* details_filename) {
 	int i;
 	char ID[BUF];
-	Boolean flag = TRUE;
+	int count = 0;
 	printf("Enter ID to search: ");
 	while ((getchar()) != '\n'); //clear buffer
 	scanf("%s", ID);
@@ -244,11 +244,10 @@ void addFlightToPerson(FILE* Names, FILE* Details, Person* Prs, int numbers_of_p
 			(Prs + i)->FlightInfo = (Flight*)realloc((Prs + i)->FlightInfo, ((Prs + i)->Number_Of_Flights) * sizeof(Flight));
 			Flight* Flt = (Prs + i)->FlightInfo;
 			GetFlight(Flt + ((Prs + i)->Number_Of_Flights - 1), ((Prs + i)->Number_Of_Flights - 1));
+			count++;
 		}
-		else 
-			flag = FALSE;
 	}
-	if (flag == FALSE) {
+	if (count==0) {
 		printf("cannot find person ID!\n");
 		return;
 	}
