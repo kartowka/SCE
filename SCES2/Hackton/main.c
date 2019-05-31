@@ -58,9 +58,9 @@ void GetFlight(Flight *, int);
 FILE* getFile(FILE*,char*);
 void readPersonFromFile(FILE*, Person*);
 void readFlightFromFile(FILE*, Flight*, int);
-int CheckForID(FILE*,char*);
+Boolean CheckForID(FILE*,char*);
 void PrintFlight(Person *);
-int CheckForIDInFile(FILE*,char*);
+Boolean CheckForIDInFile(FILE*,char*);
 void printToFile(FILE**, Person*);
 void freePerson(Person*, int *);
 void freeFlight(Flight*);
@@ -234,6 +234,7 @@ FILE* getFile(FILE* fp, char *name) { //open file for write
 void addFlightToPerson(FILE* Names, FILE* Details, Person* Prs, int numbers_of_person, char* details_filename) {
 	int i;
 	char ID[BUF];
+	Boolean flag = TRUE;
 	printf("Enter ID to search: ");
 	while ((getchar()) != '\n'); //clear buffer
 	scanf("%s", ID);
@@ -244,6 +245,12 @@ void addFlightToPerson(FILE* Names, FILE* Details, Person* Prs, int numbers_of_p
 			Flight* Flt = (Prs + i)->FlightInfo;
 			GetFlight(Flt + ((Prs + i)->Number_Of_Flights - 1), ((Prs + i)->Number_Of_Flights - 1));
 		}
+		else 
+			flag = FALSE;
+	}
+	if (flag == FALSE) {
+		printf("cannot find person ID!\n");
+		return;
 	}
 	Details = fopen(details_filename, "w"); //add information to file we already have the struct so its add everything again
 	for (i = 0; i < numbers_of_person; i++) {
@@ -275,28 +282,38 @@ void printPerson(FILE* Names,FILE* Details,char* id_filename,char* details_filen
 void checkPriceLimit(Person* Prs, int numbers_of_person) { //print all person above cost limit
 	int i, j;
 	int limit;
+	Boolean flag = FALSE;
 	printf("enter min price limit\n");
 	scanf("%d", &limit);
 	for (i = 0; i < numbers_of_person; i++) {
 		for (j = 0; j < (Prs + i)->Number_Of_Flights; ++j) {
 			Flight* Flt = (Prs + i)->FlightInfo;
-			if ((Flt + j)->Price > limit)
+			if ((Flt + j)->Price > limit) {
 				printf("%s %s\n", (Prs + i)->Name, (Prs + i)->Surname);
+				flag = TRUE;
+			}
 		}
 	}
+	if(flag==FALSE)
+		printf("cannot find person with that information!\n");
 }
 void checkDurationLimit(Person* Prs,int numbers_of_person) { //print all person above duration 
 	int i,j;
 	float limit;
+	Boolean flag = FALSE;
 	printf("enter min duration limit(float): ");
 	scanf("%f", &limit);
 	for (i = 0; i < numbers_of_person; i++) {
 		for (j = 0; j < (Prs + i)->Number_Of_Flights; ++j) {
 			Flight* Flt = (Prs + i)->FlightInfo;
-			if ((Flt + j)->Duration.time > limit)
+			if ((Flt + j)->Duration.time > limit) {
 				printf("%s %s\n", (Prs + i)->Name, (Prs + i)->Surname);
+				flag = TRUE;
+			}
 		}
 	}
+	if (flag == FALSE)
+		printf("cannot find person with that information!\n");
 }
 
 void readPersonFromFile(FILE*Details, Person*Member){
@@ -337,7 +354,7 @@ void readFlightFromFile(FILE*DetailsFile, Flight* Details, int Index)
 
 
 }
-int CheckForID(FILE*Names,char* ids){
+Boolean CheckForID(FILE*Names,char* ids){
 	char ch;
 	char ID[BUF];
 	char Buffer[BUF];
@@ -348,15 +365,15 @@ int CheckForID(FILE*Names,char* ids){
 	while (!feof(Names)) { //endoffile
 		fscanf(Names, "%[^\n]", Buffer);
 		if (strcmp(ID, Buffer) == 0)
-			return 1; //if sucsses return 1
+			return TRUE; //if sucsses return 1
 		for (ch = getc(Names); ch != '\n'&&ch!=EOF; ch = getc(Names)); //newline
 		if (feof(Names)) {
-			return 0; //else return 0
+			return FALSE; //else return 0
 		}
 	}
-	return 0;
+	return FALSE;
 }
-int CheckForIDInFile(FILE*Details,char *ids){
+Boolean CheckForIDInFile(FILE*Details,char *ids){
 	char ch;
 	int len = 0;
 	char Buffer[BUF];
@@ -366,14 +383,14 @@ int CheckForIDInFile(FILE*Details,char *ids){
 		fscanf(Details, "%[^\n]", Buffer);
 		if (strcmp(ids, Buffer) == 0) {
 			fseek(Details, -len, SEEK_CUR);//return seek to start of line
-			return 1;
+			return TRUE;
 		}
 		for (ch = getc(Details); ch != '\n'&&ch != EOF; ch = getc(Details)); //newline
 		if (feof(Details)) {
-			return 0;
+			return FALSE;
 		}
 	}
-	return 0;
+	return FALSE;
 }
 void PrintFlight(Person *Member) {
 	int i;
