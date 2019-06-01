@@ -65,7 +65,8 @@ void printToFile(FILE**, Person*);
 void freePerson(Person*, int *);
 void freeFlight(Flight*);
 void printIDToFILE(FILE**, Person*);
-void addFlightToPerson(FILE*, FILE*, Person*,int,char* );
+//void addFlightToPerson(FILE*, FILE*, Person*,int,char* );
+void addFlightToPerson(FILE*, Person*, int, char*);
 void checkDurationLimit(Person*, int);
 void checkPriceLimit(Person*, int);
 void printPerson(FILE*, FILE*,char*,char*);
@@ -125,7 +126,7 @@ void mainMenu() {
 			switch (choice)
 			{
 			case 1: {
-				addFlightToPerson(Names, Details, Prs, numbers_of_person,details_filename);
+				addFlightToPerson(Details, Prs, numbers_of_person,details_filename);
 				break;
 			}
 			case 2: {
@@ -231,7 +232,7 @@ FILE* getFile(FILE* fp, char *name) { //open file for write
 	fp = fopen(filename, "w");
 	return fp;
 }
-void addFlightToPerson(FILE* Names, FILE* Details, Person* Prs, int numbers_of_person, char* details_filename) {
+void addFlightToPerson(FILE* Details, Person* Prs, int numbers_of_person, char* details_filename) {
 	int i;
 	char ID[BUF];
 	int count = 0;
@@ -243,7 +244,7 @@ void addFlightToPerson(FILE* Names, FILE* Details, Person* Prs, int numbers_of_p
 			(Prs + i)->Number_Of_Flights += 1;
 			(Prs + i)->FlightInfo = (Flight*)realloc((Prs + i)->FlightInfo, ((Prs + i)->Number_Of_Flights) * sizeof(Flight));
 			Flight* Flt = (Prs + i)->FlightInfo;
-			GetFlight(Flt + ((Prs + i)->Number_Of_Flights - 1), ((Prs + i)->Number_Of_Flights - 1));
+			GetFlight(Flt + ((Prs + i)->Number_Of_Flights - 1), ((Prs + i)->Number_Of_Flights - 1)); //add flight size-1,index size-1
 			count++;
 		}
 	}
@@ -256,7 +257,7 @@ void addFlightToPerson(FILE* Names, FILE* Details, Person* Prs, int numbers_of_p
 		printToFile(&Details, Prs + i);
 
 	}
-	fclose(Details); fclose(Names); //file close
+	fclose(Details); //file close
 }
 void printPerson(FILE* Names,FILE* Details,char* id_filename,char* details_filename) {
 	Names = fopen(id_filename, "r"); //open file for read
@@ -281,37 +282,41 @@ void printPerson(FILE* Names,FILE* Details,char* id_filename,char* details_filen
 void checkPriceLimit(Person* Prs, int numbers_of_person) { //print all person above cost limit
 	int i, j;
 	int limit;
-	Boolean flag = FALSE;
+	int count = 0;
 	printf("enter min price limit\n");
 	scanf("%d", &limit);
 	for (i = 0; i < numbers_of_person; i++) {
+		int count_samename = 0;
 		for (j = 0; j < (Prs + i)->Number_Of_Flights; ++j) {
 			Flight* Flt = (Prs + i)->FlightInfo;
-			if ((Flt + j)->Price > limit) {
+			if ((Flt + j)->Price > limit&&count_samename<1) {
 				printf("%s %s\n", (Prs + i)->Name, (Prs + i)->Surname);
-				flag = TRUE;
+				count_samename++;
+				count++;
 			}
 		}
 	}
-	if(flag==FALSE)
+	if(count==0)
 		printf("cannot find person with that information!\n");
 }
 void checkDurationLimit(Person* Prs,int numbers_of_person) { //print all person above duration 
 	int i,j;
 	float limit;
-	Boolean flag = FALSE;
+	int count = 0;
 	printf("enter min duration limit(float): ");
 	scanf("%f", &limit);
 	for (i = 0; i < numbers_of_person; i++) {
+		int count_samename = 0;
 		for (j = 0; j < (Prs + i)->Number_Of_Flights; ++j) {
 			Flight* Flt = (Prs + i)->FlightInfo;
-			if ((Flt + j)->Duration.time > limit) {
+			if ((Flt + j)->Duration.time > limit&&count_samename < 1) {
 				printf("%s %s\n", (Prs + i)->Name, (Prs + i)->Surname);
-				flag = TRUE;
+				count_samename++;
+				count++;
 			}
 		}
 	}
-	if (flag == FALSE)
+	if (count==0)
 		printf("cannot find person with that information!\n");
 }
 
